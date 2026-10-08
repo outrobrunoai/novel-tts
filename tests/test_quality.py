@@ -35,8 +35,9 @@ class QualityTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / 'manifest.json').write_text('{"version":"1.4.0"}')
+            (root / 'docs').mkdir()
             names = ('novel_tts.py', 'companion_server.py', 'protocol.js', 'content-panel.js',
-                     'content.js', 'README.md', 'TESTING.md', 'RELEASE_NOTES.md')
+                     'content.js', 'README.md', 'TESTING.md', 'RELEASE_NOTES.md', 'docs/GUIDE.md')
             for name in names:
                 (root / name).write_text('wrong')
             self.assertEqual(checker.check(root), 1)
@@ -49,6 +50,8 @@ class QualityTests(unittest.TestCase):
             self.assertEqual(checker.check(root), 1)
             (root / 'TESTING.md').write_text('Validation 1.4.0')
             (root / 'RELEASE_NOTES.md').write_text('Release 1.4.0')
+            self.assertEqual(checker.check(root), 1)  # docs/GUIDE.md still names no version
+            (root / 'docs/GUIDE.md').write_text('Guia 1.4.0')
             self.assertEqual(checker.check(root), 0)
             (root / 'content-panel.js').write_text('<span class="nlr-version">1.5.0</span>')
             self.assertEqual(checker.check(root), 1)
@@ -56,37 +59,55 @@ class QualityTests(unittest.TestCase):
     def test_required_workflow_and_local_command_exist(self):
         self.assertTrue((ROOT / '.github/workflows/ci.yml').exists())
         self.assertTrue((ROOT / 'scripts/verify.sh').exists())
+        self.assertTrue((ROOT / 'scripts/check_docs.py').exists())
+        for gate in ('scripts/verify.sh', '.github/workflows/ci.yml'):
+            self.assertIn('scripts/check_docs.py', (ROOT / gate).read_text(), gate)
 
     def test_public_documents_carry_no_internal_process_notes_or_personal_paths(self):
         forbidden = re.compile(
             r'checkpoint|FASE \d|AMO reviewer|revisor AMO|n[ãa]o tem remote|ainda n[ãa]o tem remote|'
             r'point elsewhere|apontar para outro|/mnt/|/home/[a-z]', re.IGNORECASE)
-        for document in sorted(ROOT.glob('*.md')):
+        for document in sorted([*ROOT.glob('*.md'), *ROOT.glob('docs/*.md')]):
             if document.name == 'CLAUDE.md':
                 continue  # local agent notes; never tracked or published
             hits = [m.group(0) for m in forbidden.finditer(document.read_text())]
-            self.assertEqual(hits, [], document.name)
+            self.assertEqual(hits, [], str(document.relative_to(ROOT)))
 
     def test_documented_facts_match_what_users_actually_get(self):
         text = {name: (ROOT / name).read_text() for name in (
-            'README.md', 'HOST_README.md', 'RELEASE_NOTES.md', 'SECURITY.md', 'PRIVACY_POLICY.md',
-            'THIRD_PARTY_NOTICES.md', 'ROADMAP.md')}
-        for name in ('README.md', 'HOST_README.md', 'RELEASE_NOTES.md'):
-            # The units run /usr/bin/python3; a venv or conda `python3` may be another interpreter.
+            'README.md', 'docs/GUIDE.md', 'HOST_README.md', 'RELEASE_NOTES.md', 'SECURITY.md',
+            'PRIVACY_POLICY.md', 'THIRD_PARTY_NOTICES.md', 'ROADMAP.md')}
+        guide = text['docs/GUIDE.md']  # the complete reference; the README only introduces it
+        # The units run /usr/bin/python3; a venv or conda `python3` may be another interpreter.
+        for name in ('README.md', 'docs/GUIDE.md', 'HOST_README.md', 'RELEASE_NOTES.md'):
             self.assertNotRegex(text[name], r'(?<!/bin/)python3 novel_tts\.py upgrade', name)
+        for name in ('docs/GUIDE.md', 'HOST_README.md', 'RELEASE_NOTES.md'):
             self.assertIn('/usr/bin/python3 novel_tts.py upgrade', text[name], name)
         for code in ('NLR_QWEN_PORT_CONFLICT', 'NLR_CACHE_HEALTH_FAILED'):
-            self.assertIn(code, text['README.md'])
-        for name in ('README.md', 'HOST_README.md'):
+            self.assertIn(code, guide)
+        for name in ('docs/GUIDE.md', 'HOST_README.md'):
             self.assertRegex(text[name], r'setup`? ou `?upgrade', name)  # what `rollback` undoes
+        for name in ('README.md', 'docs/GUIDE.md', 'HOST_README.md'):
             self.assertNotRegex(text[name], r'(?i)mostra o plano,? (e )?pede|mostra o plano, pede', name)
-        for name in ('SECURITY.md', 'PRIVACY_POLICY.md', 'README.md'):
-            self.assertIn('CORS', text[name], name)  # the engine on 8080 has no auth and allows any origin
+        # The engine on 8080 has no authentication and allows any origin. Say so where people read
+        # about security, where they land, and in the package that installs it.
+        for name in ('README.md', 'SECURITY.md', 'PRIVACY_POLICY.md', 'HOST_README.md', 'ROADMAP.md'):
+            self.assertIn('CORS', text[name], name)
+        for name in ('README.md', 'SECURITY.md'):
+            self.assertRegex(text[name], r'(?i)não exige autenticação|does not authenticate', name)
         notes = ' '.join(text['RELEASE_NOTES.md'].split())  # hard-wrapped lines
+        fixes = notes.split('## Correções')[1].split('## Atualizando')[0]
+        known = notes.split('## Problemas conhecidos')[1]
         self.assertIn('pré-geração exige um link', notes)
         self.assertIn('antes uma instalação nova não conseguia gravar o cache', notes)
+        self.assertIn('não tem autenticação', known)  # listed as a known problem...
+        self.assertNotIn('CORS', fixes)               # ...and never presented as fixed
         self.assertNotIn('Novel Local Reader source', text['THIRD_PARTY_NOTICES.md'])
         self.assertIn('CORS', text['ROADMAP.md'])
+        # Where the installation steps live now: shipped notices must not send people to the README.
+        self.assertNotRegex(text['THIRD_PARTY_NOTICES.md'], r'\bREADME\b')
+        self.assertNotRegex(text['HOST_README.md'], r'(?i)\bno README\b|\bREADME do repositório')
+        self.assertIn('/docs/GUIDE.md', text['HOST_README.md'])
 
     def workflows(self):
         return sorted((ROOT / '.github/workflows').glob('*.yml'))

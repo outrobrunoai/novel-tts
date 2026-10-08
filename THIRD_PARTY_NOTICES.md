@@ -59,7 +59,7 @@ Novel TTS does not include, install, download or redistribute the Qwen TTS engin
 run by the user, and this release was tested with:
 
 - repository: `https://github.com/ServeurpersoCom/qwentts.cpp.git`;
-- commit: `90efdc60d62f7d6c70113994d0be17e820fd8673` (the commit recommended by the README);
+- commit: `90efdc60d62f7d6c70113994d0be17e820fd8673` (the commit recommended by the [installation guide](https://github.com/outrobrunoai/novel-tts/blob/main/docs/GUIDE.md));
 - engine license: MIT, according to the repository's `LICENSE` file.
 
 Another compatible `tts-server` can be used. Users must obtain and review the engine themselves,
@@ -68,7 +68,7 @@ including the notices of its own dependencies.
 ## Models and voice material
 
 Models are external, user-provided dependencies and are never part of this repository or its
-release packages. The README points to the GGUF conversions published at
+release packages. The installation guide points to the GGUF conversions published at
 `https://huggingface.co/Serveurperso/Qwen3-TTS-GGUF` (talker `qwen-talker-1.7b-base-Q8_0.gguf` and
 codec `qwen-tokenizer-12hz-Q8_0.gguf`). The repository's metadata declares the Apache-2.0 license
 and the files are conversions of the upstream Qwen3-TTS weights published by the Qwen team;

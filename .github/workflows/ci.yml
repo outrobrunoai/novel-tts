@@ -54,6 +54,7 @@ jobs:
       - run: shellcheck install-service.sh scripts/*.sh
       - run: python3 scripts/check_publication.py
       - run: python3 scripts/check_versions.py
+      - run: python3 scripts/check_docs.py
       - run: git diff --check
   packaging:
     needs: [python, javascript, security]

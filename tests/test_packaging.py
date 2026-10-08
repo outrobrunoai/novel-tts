@@ -191,6 +191,28 @@ class PackagingTests(unittest.TestCase):
                 self.assertIn('Novel TTS', privacy)
                 self.assertNotIn('AMO reviewer', privacy)
 
+    @needs_git
+    def test_inspector_requires_the_engine_warning_in_the_packaged_documents(self):
+        # The host package is what installs the unauthenticated engine; its own documents must say so.
+        with tempfile.TemporaryDirectory() as temp:
+            out = Path(temp) / 'out'
+            PACKAGE.build(out, ROOT)
+            host = out / f'{PACKAGE.ARTIFACT_PREFIX}-host-{VERSION}.tar.gz'
+            item = {'files': list(PACKAGE.HOST)}
+            RELEASE_INSPECTOR._verify_host(host, item, VERSION)  # the real archive passes
+            for document in ('HOST_README.md', 'PRIVACY_POLICY.md'):
+                stripped = Path(temp) / f'without-{document}.tar.gz'
+                with tarfile.open(host) as source, tarfile.open(stripped, 'w:gz') as target:
+                    for member in source.getmembers():
+                        data = source.extractfile(member).read()
+                        if member.name.endswith('/' + document):
+                            data = data.replace(b'CORS', b'XXXX').replace(b'cors', b'xxxx')
+                            member.size = len(data)
+                        target.addfile(member, __import__('io').BytesIO(data))
+                with self.subTest(document=document):
+                    with self.assertRaises(ValueError):
+                        RELEASE_INSPECTOR._verify_host(stripped, item, VERSION)
+
     def test_release_inspector_rejects_private_paths_but_allows_vendor_build_root(self):
         RELEASE_INSPECTOR._safe_public_archive(
             {'vendor/pdf.worker.mjs'},

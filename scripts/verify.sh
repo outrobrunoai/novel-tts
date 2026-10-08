@@ -21,6 +21,7 @@ if [ -x node_modules/.bin/web-ext ]; then npx --no-install web-ext lint --ignore
 if command -v shellcheck >/dev/null 2>&1; then shellcheck install-service.sh scripts/*.sh; else echo 'missing required tool: shellcheck' >&2; exit 2; fi
 python3 scripts/check_publication.py
 python3 scripts/check_versions.py
+python3 scripts/check_docs.py
 release_tmp=$(mktemp -d)
 trap 'rm -rf "$release_tmp"' EXIT
 python3 scripts/package_release.py --output "$release_tmp/build-a"

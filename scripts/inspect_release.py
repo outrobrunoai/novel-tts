@@ -216,10 +216,15 @@ def _verify_host(archive_path: Path, manifest_item: dict, version: str) -> None:
         _fail('HOST_README não é autossuficiente ou launcher inválido')
     if not all(term in host_readme for term in ('install-service.sh', 'upgrade', 'restore', 'snapshot', 'privacy_policy.md')):
         _fail('HOST_README omite fluxo operacional necessário')
+    # The package installs an engine that has no authentication and allows any origin.
+    if 'cors' not in host_readme:
+        _fail('HOST_README omite a limitação do motor sem autenticação (CORS)')
     if not all(term in privacy_policy for term in
                ('authenticationInfo', 'websiteContent', 'temperature', 'seed',
                 '127.0.0.1:8081', 'Authorization', 'configured', 'cach')):
         _fail('política de privacidade não cobre os dados/destinos observados')
+    if 'CORS' not in privacy_policy:
+        _fail('política de privacidade omite a limitação do motor sem autenticação (CORS)')
 
 
 def inspect(directory: Path) -> None:

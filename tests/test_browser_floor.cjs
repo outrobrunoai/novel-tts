@@ -40,7 +40,11 @@ test('the declared Firefox minimum covers every built-in the vendored PDF.js cal
 test('the Firefox minimum is stated the same way in the manifest and the documentation', () => {
   const major = Number.parseInt(minimum, 10);
   assert.match(minimum, /^\d+\.0$/);
+  // The README introduces the project: summary line and badge. The guide holds the full requirements.
   assert.match(read('README.md'), new RegExp(`Firefox ${major}\\+`));
-  assert.match(read('README.md'), new RegExp(`Desktop ${major} ou superior`));
+  assert.match(read('README.md'), new RegExp(`Firefox-${major}%2B`));
+  const guide = read('docs/GUIDE.md');
+  assert.match(guide, new RegExp(`\\| Firefox \\| Desktop ${major} ou superior \\|`));
+  assert.match(guide, new RegExp(`Firefox ${major} é o mínimo porque o leitor de PDF`));
   assert.match(read('CONTRIBUTING.md'), new RegExp(`Firefox ${major} or newer`));
 });

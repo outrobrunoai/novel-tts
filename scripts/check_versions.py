@@ -20,6 +20,7 @@ def check(root, artifacts=None):
         ('content-panel.js', rf'<span class="nlr-version">{re.escape(version)}</span>'),
         ('content.js', rf"version:\s*['\"]{re.escape(version)}['\"]"),
         ('README.md', rf'(?<![0-9A-Za-z]){re.escape(version)}(?![0-9A-Za-z])'),
+        ('docs/GUIDE.md', rf'(?<![0-9A-Za-z]){re.escape(version)}(?![0-9A-Za-z])'),
         ('TESTING.md', rf'(?<![0-9A-Za-z]){re.escape(version)}(?![0-9A-Za-z])'),
         ('RELEASE_NOTES.md', rf'(?<![0-9A-Za-z]){re.escape(version)}(?![0-9A-Za-z])'),
     ]

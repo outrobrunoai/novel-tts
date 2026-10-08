@@ -27,7 +27,7 @@ validates its configuration and **refuses any engine address that is not loopbac
 (`qwentts.cpp`) is a separate program; its own logging and retention are governed by that program.
 It has no authentication and answers browser requests from any origin (CORS), so while it runs a
 web page you visit could try to reach `127.0.0.1:8080` and have text synthesized in your registered
-voice; see `SECURITY.md`.
+voice; see [`SECURITY.md`](https://github.com/outrobrunoai/novel-tts/blob/main/SECURITY.md).
 
 Normal narration returns the generated WAV audio to the extension for playback. Future-chapter
 warm-cache requests send text to the companion but return only small metadata to the extension; the
@@ -91,9 +91,9 @@ program files and units and also keeps them. Delete those directories yourself i
 ## Contact and changes
 
 Questions about this notice: open an issue at <https://github.com/outrobrunoai/novel-tts/issues>.
-Security problems: see `SECURITY.md` and use the private advisory form instead. Never include
+Security problems: see [`SECURITY.md`](https://github.com/outrobrunoai/novel-tts/blob/main/SECURITY.md) and use the private advisory form instead. Never include
 tokens, document text, voice material or model files in a report. Changes to this notice are made
-in the repository and noted in `RELEASE_NOTES.md`.
+in the repository and noted in [`RELEASE_NOTES.md`](https://github.com/outrobrunoai/novel-tts/blob/main/RELEASE_NOTES.md).
 
 ---
 
@@ -123,7 +123,7 @@ configuração e **recusa qualquer endereço de motor que não seja loopback** (
 `localhost`); portanto, por este projeto, o texto não sai da máquina. O motor (`qwentts.cpp`) é um
 programa separado, e seu registro e retenção são regidos por ele. Ele não tem autenticação e
 responde a requisições de qualquer origem (CORS); enquanto roda, uma página que você visite pode
-tentar acessar `127.0.0.1:8080` e gerar fala com a voz registrada (veja `SECURITY.md`).
+tentar acessar `127.0.0.1:8080` e gerar fala com a voz registrada (veja [`SECURITY.md`](https://github.com/outrobrunoai/novel-tts/blob/main/SECURITY.md)).
 
 A narração normal devolve o áudio WAV à extensão para reprodução. As requisições de warm-cache de
 capítulos futuros enviam texto ao serviço, mas devolvem à extensão apenas metadados pequenos; o
@@ -186,6 +186,6 @@ arquivos do programa e as units, e também os preserva. Apague esses diretórios
 ## Contato e mudanças
 
 Dúvidas sobre este aviso: abra uma issue em <https://github.com/outrobrunoai/novel-tts/issues>.
-Problemas de segurança: veja `SECURITY.md` e use o formulário privado de advisories. Nunca inclua
+Problemas de segurança: veja [`SECURITY.md`](https://github.com/outrobrunoai/novel-tts/blob/main/SECURITY.md) e use o formulário privado de advisories. Nunca inclua
 tokens, texto de documentos, material de voz ou modelos num relato. Mudanças neste aviso são feitas
-no repositório e registradas em `RELEASE_NOTES.md`.
+no repositório e registradas em [`RELEASE_NOTES.md`](https://github.com/outrobrunoai/novel-tts/blob/main/RELEASE_NOTES.md).

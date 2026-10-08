@@ -3,8 +3,8 @@
 Este pacote contém **somente** o serviço local e o instalador da extensão Novel TTS. O motor
 `qwentts.cpp` (com o `tts-server`), os modelos GGUF, a voz, o token, o cache e a configuração são
 fornecidos e mantidos por você; nenhum deles vem aqui nem é baixado. O guia completo (como compilar
-o motor, baixar os modelos e preparar a voz) está no README do repositório:
-<https://github.com/outrobrunoai/novel-tts>.
+o motor, baixar os modelos e preparar a voz) está no
+[guia de instalação do repositório](https://github.com/outrobrunoai/novel-tts/blob/main/docs/GUIDE.md).
 
 ## O que será instalado
 
@@ -22,6 +22,12 @@ Tudo na sua conta de usuário, sem `sudo`:
 O cache autenticado escuta em `127.0.0.1:8081` e o motor em `127.0.0.1:<--qwen-port>` (padrão
 8080). Nenhum dos dois pode ser exposto em outra interface; o host recusa uma configuração cujo
 motor não esteja em loopback. Veja `PRIVACY_POLICY.md` para os dados que trafegam.
+
+**Limitação conhecida:** o motor (qwentts.cpp) escuta só em loopback, mas não exige autenticação e
+aceita requisições de qualquer origem (CORS `*`). Uma página aberta no navegador pode tentar acessá-lo,
+e a autenticação do cache não protege esse acesso direto. Evite sites não confiáveis enquanto o
+serviço estiver ativo e não exponha as portas à rede. Detalhes em
+[SECURITY.md](https://github.com/outrobrunoai/novel-tts/blob/main/SECURITY.md).
 
 ## Requisitos
 

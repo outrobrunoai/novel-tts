@@ -200,7 +200,7 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(health['protocol']['current'], PROTOCOL_CURRENT)
         self.assertEqual(json.loads((ROOT / 'manifest.json').read_text())['version'], SERVICE_VERSION)
         self.assertIn(f'const APP_VERSION = "{SERVICE_VERSION}"', (ROOT / 'protocol.js').read_text())
-        self.assertIn(f'protocolo de aplicação {PROTOCOL_CURRENT}', (ROOT / 'README.md').read_text())
+        self.assertIn(f'protocolo de aplicação {PROTOCOL_CURRENT}', (ROOT / 'docs/GUIDE.md').read_text())
         _, body, _ = self.request('/voices')
         self.assertEqual(json.loads(body), {'voices': ['other', 'sample_voice'], 'default_voice': 'sample_voice'})
 

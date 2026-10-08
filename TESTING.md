@@ -10,7 +10,9 @@ python3 -m pip install ruff==0.16.10     # Python 3.10 ou superior
 
 O script roda, nesta ordem: os testes Python (com `ResourceWarning` tratado como erro), os testes
 Node, `py_compile`, `node --check`, o manifesto, Ruff, ESLint, `web-ext lint`, ShellCheck, a
-higiene de publicação (`check_publication.py`), a consistência de versão (`check_versions.py`), duas
+higiene de publicação (`check_publication.py`), a consistência de versão (`check_versions.py`), a
+documentação (`check_docs.py`: links relativos, âncoras, caixa dos nomes de arquivo, espaços em branco e o
+que cada pacote cita), duas
 builds independentes dos artefatos (que precisam sair **idênticas byte a byte**), a inspeção dos
 artefatos (`inspect_release.py`), o lint do ZIP extraído e `git diff --check`. Ele termina com
 `verification: OK`.
@@ -70,6 +72,8 @@ mínimo.
   portas, desinstalação conservadora.
 - `tests/test_packaging.py`, `test_quality.py` — artefatos reproduzíveis, allowlists, higiene dos
   documentos e dos workflows. Os testes de build exigem um clone git e são ignorados fora dele.
+- `tests/test_docs.py` — o verificador de documentação (`scripts/check_docs.py`): os documentos do
+  repositório passam e cada tipo de quebra (link, âncora, caixa, pacote) é reprovado.
 - `tests/test_browser_floor.cjs` — o `strict_min_version` do manifesto cobre os recursos que o PDF.js
   empacotado chama, e a documentação diz o mesmo mínimo.
 - `tests/test_*.cjs` — background, fila, protocolo, painel, reprodução, progresso, navegação,
