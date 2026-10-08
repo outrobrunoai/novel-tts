@@ -3,7 +3,7 @@
 ## Scope
 
 Keep changes incremental and preserve the existing Firefox extension and local Qwen3-TTS
-integration. The supported baseline is Linux with a user systemd instance, Firefox 142 or newer, a
+integration. The supported baseline is Linux with a user systemd instance, Firefox 144 or newer, a
 separately supplied qwentts.cpp-compatible engine, and user-provided models and voice material.
 
 Do not introduce implicit downloads of models or voices. Do not migrate the codebase wholesale to

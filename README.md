@@ -13,7 +13,7 @@ fornecidos por você.
 > [qwentts.cpp](https://github.com/ServeurpersoCom/qwentts.cpp) server. You build the engine,
 > download the GGUF models and prepare a voice sample yourself (steps 1–3 below); then run
 > `./install-service.sh` from the host package (step 4), install the extension (step 5) and
-> paste the pairing token into its options (step 6). Linux, systemd user session, Firefox 142+,
+> paste the pairing token into its options (step 6). Linux, systemd user session, Firefox 144+,
 > Python 3.10+. Everything stays on `127.0.0.1`. The rest of this document is in Portuguese.
 
 ## Como funciona
@@ -36,11 +36,14 @@ Firefox (extensão)  ──Bearer token──▶  127.0.0.1:8081  cache autentic
 | --- | --- |
 | Sistema | Linux com sessão `systemd --user` |
 | Python | 3.10 ou superior em `/usr/bin/python3` (só biblioteca padrão) |
-| Firefox | Desktop 142 ou superior |
+| Firefox | Desktop 144 ou superior |
 | Para compilar o motor | `git`, CMake, compilador C++17; para Vulkan, os headers do Vulkan e o `glslc` |
 | GPU | Recomendada (Vulkan ou CUDA). Em CPU funciona, mas é lento |
 | Disco | ~2,5 GB para os modelos + o cache (padrão: até 4 GB) |
 | Portas livres | 8080 (motor, configurável com `--qwen-port`) e 8081 (cache, fixa) |
+
+O Firefox 144 é o mínimo porque o leitor de PDF empacotado (PDF.js) usa recursos que só existem a
+partir dele; versões anteriores recusam a instalação do `.xpi`.
 
 Windows e macOS não são suportados. Não use `sudo` em nenhum passo.
 

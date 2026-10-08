@@ -23,7 +23,7 @@ node --test tests/*.cjs
 ```
 
 O CI (`.github/workflows/ci.yml`) roda os testes Python em 3.10, 3.12 e 3.14, o JavaScript em
-Node 24, a higiene e o empacotamento. Nenhuma etapa usa segredo, systemd real ou o motor Qwen.
+Node 24 (o das releases) e Node 26 (o mais novo), a higiene e o empacotamento. Nenhuma etapa usa segredo, systemd real ou o motor Qwen.
 
 ## Isolamento
 
@@ -43,6 +43,22 @@ PATH=/tmp/tripwires:$PATH python3 -m unittest discover -s tests -p 'test_*.py'
 Modelos, vozes, tokens, caches e áudios pessoais não participam dos testes e não podem ser
 adicionados ao git; `scripts/check_publication.py` falha se um arquivo rastreado cair nessas classes.
 
+## Node, Firefox e o PDF.js
+
+Os testes de importação de PDF carregam o PDF.js real dentro do Node. O PDF.js empacotado é o build
+moderno: chama recursos novos (`Uint8Array.prototype.toHex`, `Map.prototype.getOrInsertComputed`...)
+sem polyfill, e o Node 24 ainda não os tem, ao contrário do Firefox 144 ou mais novo, que é o
+ambiente real. Por isso `tests/support/firefox-builtins.cjs` fornece esses métodos **só aos testes**,
+quando faltam; é por isso também que o CI roda Node 24 e 26.
+
+O mínimo do Firefox (`strict_min_version`) foi **medido**, não presumido: PDFs reais (LaTeX,
+LibreOffice etc.) foram extraídos com o código de importação do produto em Firefox 142, 143, 144 e
+157 (headless, perfil descartável, PDF.js servido por um servidor local). No 142 e no 143, 3 de 8
+falharam com `getOrInsertComputed is not a function`; no 144 e no 157, nenhum. A tabela em
+`tests/test_browser_floor.cjs` registra o primeiro Firefox em que cada recurso foi observado.
+**Ao atualizar o `vendor/`, repita essa medição e amplie a tabela** antes de manter ou baixar o
+mínimo.
+
 ## O que cada suíte cobre
 
 - `tests/test_service.py` — cache autenticado: token, `Host`/`Origin`, limites, WAV truncado,
@@ -54,6 +70,8 @@ adicionados ao git; `scripts/check_publication.py` falha se um arquivo rastreado
   portas, desinstalação conservadora.
 - `tests/test_packaging.py`, `test_quality.py` — artefatos reproduzíveis, allowlists, higiene dos
   documentos e dos workflows. Os testes de build exigem um clone git e são ignorados fora dele.
+- `tests/test_browser_floor.cjs` — o `strict_min_version` do manifesto cobre os recursos que o PDF.js
+  empacotado chama, e a documentação diz o mesmo mínimo.
 - `tests/test_*.cjs` — background, fila, protocolo, painel, reprodução, progresso, navegação,
   importadores EPUB/PDF/TXT/HTML (inclusive um PDF sintético de 5.001 páginas), i18n e consistência
   do manifesto.
@@ -87,7 +105,9 @@ Use um perfil descartável do Firefox, texto sintético e, de preferência, uma 
    novo deve falhar com mensagem legível, sem corromper o cache.
 7. Reinicie o motor até 60 s depois de gerar áudio e confirme que ele volta sozinho.
 8. Coloque um `teste.wav` na pasta do cache, use **Limpar cache** e confirme que ele permanece.
-9. `novel-tts upgrade --dry-run --json`, `backup`, `restore --dry-run`, `token --rotate`,
+9. Importe um PDF com fontes embutidas (por exemplo, exportado pelo LibreOffice ou pelo Word) no
+   Firefox do mínimo declarado e confira que o texto aparece.
+10. `novel-tts upgrade --dry-run --json`, `backup`, `restore --dry-run`, `token --rotate`,
    `uninstall --dry-run --json`.
 
 Registre a distribuição, o Firefox e o resultado ao validar em uma máquina nova.

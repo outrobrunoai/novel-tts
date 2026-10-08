@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const vm = require('node:vm');
+require('./support/firefox-builtins.cjs'); // Firefox's built-ins on Node releases that lack them
 
 const root = path.join(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'document-import.js'), 'utf8');
@@ -729,7 +730,7 @@ test('reader loads the import guard before its module', () => {
 
 test('local reader paragraphs keep their DOM identity through progress highlighting', async () => {
   const { pdfjsLib, runtimeGetURL } = await realPdfJs();
-  const { context, elements, FakeFile, document } = readerHarness({ pdfjsLib, runtimeGetURL });
+  const { context, elements, state, FakeFile, document } = readerHarness({ pdfjsLib, runtimeGetURL });
   const file = new FakeFile([multiPagePdf(2).buffer], 'local-document.pdf', { type: 'application/pdf' });
   await context.importFile(file);
 
@@ -739,7 +740,8 @@ test('local reader paragraphs keep their DOM identity through progress highlight
   vm.runInContext(progressSource, context);
 
   const rendered = elements['#reader-content'].children;
-  assert.equal(rendered.length, 2);
+  // The status line carries the real reason when the import failed (not just "0 !== 2").
+  assert.equal(rendered.length, 2, `${elements['#status'].textContent}; ${state.errors.join('; ')}`);
   const snapshot = context.NovelLocalReader.contentDocument.createPageSnapshot({
     document,
     contentSelector: '#reader-content'

@@ -16,6 +16,6 @@ module.exports = [{ ignores: ['vendor/**'] }, {
 }, {
   files: ['eslint.config.js'], languageOptions: { ecmaVersion: 2022, sourceType: 'commonjs', globals: {module:'readonly', ...nodeGlobals} }
 }, {
-  files: ['*.cjs', 'tests/*.cjs'], languageOptions: { ecmaVersion: 2022, sourceType: 'commonjs', globals: nodeGlobals },
+  files: ['*.cjs', 'tests/*.cjs', 'tests/support/*.cjs'], languageOptions: { ecmaVersion: 2022, sourceType: 'commonjs', globals: nodeGlobals },
   rules: { 'no-undef': 'error', 'no-unreachable': 'error', 'no-dupe-keys': 'error', 'valid-typeof': 'error' }
 }];

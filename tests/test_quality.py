@@ -114,6 +114,13 @@ class QualityTests(unittest.TestCase):
                 body.append(follow)
             yield '\n'.join(body)
 
+    def test_javascript_tests_run_on_the_ci_node_and_on_the_newest_node(self):
+        # Developing on a newer Node than CI hid a missing built-in for months; test both.
+        text = (ROOT / '.github/workflows/ci.yml').read_text()
+        javascript = text.split('  javascript:')[1].split('\n  security:')[0]
+        self.assertRegex(javascript, r"node-version: \['24', '26'\]")
+        self.assertIn('matrix.node-version', javascript)
+
     def test_workflow_scripts_never_interpolate_expressions(self):
         # `${{ ... }}` inside a script is an injection vector; values travel through env.
         for workflow in self.workflows():

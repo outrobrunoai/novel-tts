@@ -18,6 +18,10 @@ configuração, token, vozes, cache, biblioteca, progresso e preferências.
 
 ## Correções desde a 1.5.0 interna
 
+- A importação de PDF falhava no Firefox 142 e 143 em PDFs comuns (por exemplo, os gerados pelo
+  LibreOffice): o PDF.js empacotado usa `Map.prototype.getOrInsertComputed`, que só existe a partir
+  do Firefox 144. O mínimo declarado passou de 142 para 144 e um teste passou a garantir que o
+  mínimo cobre o que o PDF.js usa.
 - Uma instalação nova agora cria a pasta do cache antes de iniciar as units (antes uma instalação nova
   não conseguia gravar o cache e o setup era desfeito por timeout).
 - Reiniciar o motor logo depois de ler (a porta ficava em TIME_WAIT por ~1 minuto) já não falha com
