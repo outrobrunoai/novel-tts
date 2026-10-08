@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <script src="page-theme.js" defer></script>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+<title data-i18n="reader.title">Leitor de arquivos · Novel TTS</title>
+    <link rel="stylesheet" href="reader.css">
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="pages.css">
+    <link rel="stylesheet" href="page-overlay.css">
+    <script src="settings-schema.js"></script>
+    <script src="i18n.js"></script>
+  </head>
+  <body>
+    <header class="reader-header">
+        <div><span>NOVEL TTS</span><h1 data-i18n="reader.title">Leitor de arquivos</h1></div>
+      <div class="header-actions">
+          <a class="ghost-button" href="library.html" data-i18n="reader.library">Biblioteca</a>
+          <label class="file-button" data-i18n-label="reader.openFile">Abrir arquivo<input id="file" type="file" accept=".txt,.html,.htm,.epub,.pdf"></label>
+      </div>
+    </header>
+    <main>
+      <nav id="document-actions" hidden aria-label="Ações do documento" data-i18n-aria-label="reader.documentActions">
+        <button id="auto-trim" type="button" data-i18n="reader.removeCover">Remover capa/índice</button>
+        <button id="choose-start" type="button" data-i18n="reader.chooseStart">Escolher início</button>
+        <button id="undo-trim" type="button" hidden data-i18n="reader.restoreStart">Restaurar início</button>
+      </nav>
+      <section id="drop-zone">
+        <strong data-i18n="reader.dropTitle">Solte uma novel aqui</strong>
+        <span data-i18n="reader.dropHelp">PDF, EPUB, TXT ou HTML · salvo localmente; o texto é enviado ao serviço pareado quando narrado</span>
+      </section>
+      <section id="saved-section" hidden>
+        <div class="section-heading">
+          <h2 data-i18n="reader.savedFiles">Arquivos salvos</h2>
+          <span data-i18n="reader.savedHelp">Ficam disponíveis mesmo depois de reiniciar o Firefox.</span>
+        </div>
+        <div id="saved-documents"></div>
+      </section>
+      <div id="status"></div>
+      <button id="cancel-import" type="button" hidden data-i18n="reader.cancelImport">Cancelar importação</button>
+      <article id="reader-content" class="reader-content"></article>
+    </main>
+    <script src="document-store.js"></script>
+    <script src="document-import.js"></script>
+    <script src="reader-bootstrap.js"></script>
+    <script id="reader-module" type="module" src="reader.js"></script>
+    <script src="protocol.js"></script>
+    <script src="content-runtime.js"></script>
+    <script src="content-playback.js"></script>
+    <script src="content-document.js"></script>
+    <script src="content-progress.js"></script>
+    <script src="content-navigation.js"></script>
+    <script src="content-panel.js"></script>
+    <script src="content.js"></script>
+  </body>
+</html>

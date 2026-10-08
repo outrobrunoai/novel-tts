@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR" data-nlr-theme="midnight">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-i18n="options.title">Conectar · Novel TTS</title>
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="pages.css">
+  <script src="settings-schema.js"></script>
+  <script src="i18n.js"></script>
+  <script src="page-theme.js" defer></script>
+  <script src="options.js" defer></script>
+</head>
+<body>
+  <main class="pair-card">
+    <small data-i18n="options.eyebrow">NOVEL TTS / CONEXÃO</small>
+    <h1 data-i18n="options.heading">Sua voz.<br>No seu computador.</h1>
+    <p data-i18n="options.intro">A chave conecta esta extensão ao cache local protegido. Ela não é enviada ao site que você está lendo.</p>
+    <p data-i18n="options.dataHandling">Ao narrar, o texto escolhido é enviado ao serviço pareado neste computador; capítulos futuros também podem ser enviados se a pré-geração estiver ativada. O host pode encaminhá-lo ao endereço Qwen configurado; documentos e cache podem ser armazenados localmente.</p>
+    <p data-i18n="options.install">Depois de instalar o serviço, execute no terminal:</p>
+    <code>~/.local/bin/novel-tts token</code>
+    <form id="pair-form">
+      <label for="pair-token" data-i18n="options.tokenLabel">Cole a chave local</label>
+      <input id="pair-token" type="password" autocomplete="off" spellcheck="false" required minlength="32">
+      <button type="submit" data-i18n="options.save">Salvar e verificar conexão →</button>
+    </form>
+    <p id="pair-status" role="status" aria-live="polite"></p>
+    <p data-i18n="options.serverInfo">Servidor do companion: 127.0.0.1:8081. Não compartilhe a chave. O destino Qwen é definido pela configuração do host; confira-o antes de conectar.</p>
+    <hr>
+    <small data-i18n="options.authorized">SITES AUTORIZADOS</small>
+    <h2 data-i18n="options.authorizedHeading">Onde o leitor pode abrir sozinho.</h2>
+    <p data-i18n="options.authorizedIntro">Por padrão a extensão não é carregada em nenhum site: ela só entra na aba quando você clica no botão da barra de ferramentas. Autorize um site aqui apenas se quiser que a leitura continue automaticamente depois de trocar de capítulo.</p>
+    <div id="origin-request" hidden><button id="allow-origin" type="button"></button></div>
+    <ul id="origin-list"></ul>
+    <p id="origin-status" role="status" aria-live="polite"></p>
+    <p><button id="allow-all" type="button" data-i18n="options.allowAll">Autorizar todos os sites…</button></p>
+    <p><a href="library.html" data-i18n="options.backLibrary">Voltar à biblioteca</a></p>
+  </main>
+</body>
+</html>

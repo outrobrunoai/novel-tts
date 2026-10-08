@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# JavaScript dependencies and generated packages
+node_modules/
+dist/
+release-dist/
+build/
+*.xpi
+
+# User-provided models, voices, and generated audio
+*.gguf
+*.spk
+*.rvq
+*.wav
+*.mp3
+*.flac
+*.ogg
+
+# Local configuration, credentials, caches, and backups
+config.json
+*.token
+.env
+.env.*
+*.pem
+*.key
+cache/
+backups/
+
+# Runtime diagnostics
+*.log

@@ -1,0 +1,40 @@
+html[data-nlr-theme] { background:var(--nlr-bg); color:var(--nlr-text); font-family:system-ui,sans-serif; }
+html[data-nlr-theme] body { background:var(--nlr-bg); color:var(--nlr-text); margin:0 auto; padding:32px; max-width:1180px; min-height:100vh; }
+html[data-nlr-theme] :is(header,.reader-header) { border-bottom:1px solid var(--nlr-line); margin-bottom:32px; padding-bottom:24px; }
+html[data-nlr-theme] :is(h1,h2,h3) { color:var(--nlr-text); }
+html[data-nlr-theme] h1 { font:40px/1.2 Georgia,serif; letter-spacing:-1px; }
+html[data-nlr-theme] :is(header p,header span,small,.file-size,#summary,#status) { color:var(--nlr-muted); }
+html[data-nlr-theme] :is(button,.ghost-button,.file-button) { background:var(--nlr-surface); border:1px solid var(--nlr-line); color:var(--nlr-text); border-radius:10px; padding:10px 16px; cursor:pointer; font:inherit; }
+html[data-nlr-theme] :is(button,.ghost-button,.file-button):hover { border-color:var(--nlr-accent); background:var(--nlr-raised); }
+html[data-nlr-theme] :is(a,button.danger) { color:var(--nlr-accent); }
+html[data-nlr-theme] :is(input,select,textarea) { background:var(--nlr-surface); border:1px solid var(--nlr-line); color:var(--nlr-text); border-radius:9px; padding:12px; font:inherit; }
+html[data-nlr-theme] :is(input,select,textarea,button,a):focus-visible { outline:2px solid var(--nlr-accent); outline-offset:3px; }
+html[data-nlr-theme] :is(.card,.history-item,.saved-document,#drop-zone,#empty) { background:var(--nlr-surface); border:1px solid var(--nlr-line); color:var(--nlr-text); box-shadow:none; border-radius:16px; }
+html[data-nlr-theme] .reader-content { background:var(--nlr-surface); border:1px solid var(--nlr-line); padding:clamp(20px,5vw,64px); border-radius:16px; max-width:820px; margin:auto; color:var(--nlr-text); }
+html[data-nlr-theme] .reader-content :is(p,blockquote,li) { font-family:Georgia,serif; line-height:1.85; color:var(--nlr-text); }
+html[data-nlr-theme] #document-actions { margin-bottom:20px; background:var(--nlr-bg); border-color:var(--nlr-line); }
+html[data-nlr-theme] :is(.card p,#empty,#drop-zone span,.section-heading span) { color:var(--nlr-muted); }
+html[data-nlr-theme] :is(#drop-zone strong,.saved-document strong) { color:var(--nlr-text); }
+html[data-nlr-theme] .reader-content blockquote { border-color:var(--nlr-accent); }
+html[data-nlr-theme] .pair-card { max-width:580px; margin:10vh auto; background:var(--nlr-surface); border:1px solid var(--nlr-line); border-radius:24px; padding:36px; }
+html[data-nlr-theme] .pair-card p { color:var(--nlr-muted); line-height:1.7; }
+html[data-nlr-theme] .pair-card label { display:block; margin:24px 0 8px; }
+html[data-nlr-theme] .pair-card input { width:100%; box-sizing:border-box; }
+html[data-nlr-theme] .pair-card button { background:var(--nlr-accent); color:var(--nlr-ink); margin-top:16px; }
+html[data-nlr-theme] .pair-card code { display:block; white-space:normal; overflow-wrap:anywhere; background:var(--nlr-bg); padding:12px; border-radius:8px; color:var(--nlr-accent); }
+html[data-nlr-theme] .pair-card #pair-status { white-space:pre-wrap; overflow-wrap:anywhere; }
+@media(max-width:600px) { html[data-nlr-theme] body { padding:16px; } html[data-nlr-theme] h1 { font-size:30px; } }
+@media(prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; } }
+
+/* Options page: authorised origins list. */
+html[data-nlr-theme] .pair-card hr { border:none; border-top:1px solid var(--nlr-line); margin:36px 0 28px; }
+html[data-nlr-theme] .pair-card h2 { font-size:22px; letter-spacing:-.4px; margin:6px 0 12px; }
+html[data-nlr-theme] .pair-card #origin-list { list-style:none; padding:0; margin:16px 0; display:grid; gap:8px; }
+html[data-nlr-theme] .pair-card #origin-list li {
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  background:var(--nlr-bg); border:1px solid var(--nlr-line); border-radius:10px;
+  padding:10px 14px; color:var(--nlr-muted); overflow-wrap:anywhere;
+}
+html[data-nlr-theme] .pair-card #origin-list button { margin:0; background:transparent; color:var(--nlr-danger); border:1px solid var(--nlr-line); flex:none; }
+html[data-nlr-theme] .pair-card #allow-all { background:transparent; color:var(--nlr-text); border:1px solid var(--nlr-line); }
+html[data-nlr-theme] .pair-card #origin-status { white-space:pre-wrap; overflow-wrap:anywhere; }

@@ -1,0 +1,64 @@
+{
+  "manifest_version": 3,
+  "name": "Novel TTS",
+  "version": "1.0.0",
+  "description": "Lê novels e textos online usando Qwen3-TTS local com cache autenticado.",
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "unlimitedStorage"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8081/*"
+  ],
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "scripts": [
+      "protocol.js",
+      "content-runtime.js",
+      "content-playback.js",
+      "settings-schema.js",
+      "i18n.js",
+      "content-document.js",
+      "content-progress.js",
+      "content-navigation.js",
+      "content-panel.js",
+      "queue.js",
+      "background.js"
+    ]
+  },
+  "action": {
+    "default_title": "Abrir Novel TTS",
+    "default_icon": "icon.svg"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "themes.css",
+        "content.css"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ],
+  "options_ui": {"page": "options.html", "open_in_tab": true},
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "novel-local-reader@local",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": ["authenticationInfo", "websiteContent"]
+      }
+    }
+  }
+}

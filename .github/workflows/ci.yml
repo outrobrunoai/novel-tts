@@ -1,0 +1,76 @@
+name: CI
+on: [push, pull_request]
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.12', '3.14']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with: {python-version: '${{ matrix.python-version }}'}
+      - run: python -m pip install --upgrade pip ruff==0.16.10
+      - run: python -W error::ResourceWarning -m unittest discover -s tests -p 'test_*.py'
+      - run: ruff check .
+      - run: python -m py_compile companion_server.py nlr_config.py novel_tts.py scripts/*.py
+  javascript:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with: {node-version: '24', cache: npm}
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: node --test tests/*.cjs
+      - run: for file in ./*.js; do node --check "$file"; done
+      - run: npx --no-install web-ext lint --ignore-files 'vendor/**'
+      - run: npx --no-install eslint .
+      # node-forge has no patched release; it is reached only through web-ext's
+      # Android/ADB path, which this project never uses. Gate on critical issues.
+      - run: npm audit --audit-level=critical
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - run: shellcheck --version
+      - run: shellcheck install-service.sh scripts/*.sh
+      - run: python3 scripts/check_publication.py
+      - run: python3 scripts/check_versions.py
+      - run: git diff --check
+  packaging:
+    needs: [python, javascript, security]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with: {node-version: '24', cache: npm}
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: python3 scripts/package_release.py --output "$RUNNER_TEMP/release-a"
+      - run: python3 scripts/package_release.py --output "$RUNNER_TEMP/release-b"
+      - run: |
+          for artifact in "$RUNNER_TEMP/release-a"/*; do
+            cmp "$artifact" "$RUNNER_TEMP/release-b/$(basename -- "$artifact")"
+          done
+      - run: python3 scripts/inspect_release.py --directory "$RUNNER_TEMP/release-a"
+      - run: python3 scripts/check_versions.py --artifacts "$RUNNER_TEMP/release-a"
+      - run: |
+          extension="$(python3 scripts/release_asset.py extension "$RUNNER_TEMP/release-a")"
+          mkdir "$RUNNER_TEMP/extension-extracted"
+          python3 -c 'import sys,zipfile; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])' "$RUNNER_TEMP/release-a/$extension" "$RUNNER_TEMP/extension-extracted"
+      - run: npx --no-install web-ext lint --source-dir "$RUNNER_TEMP/extension-extracted" --ignore-files 'vendor/**'
+      - run: node --check "$RUNNER_TEMP/extension-extracted/vendor/pdf.mjs" && node --check "$RUNNER_TEMP/extension-extracted/vendor/pdf.worker.mjs"
+      - run: python3 -m unittest tests.test_packaging

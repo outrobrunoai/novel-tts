@@ -1,0 +1,4 @@
+/* The only rules that touch the host page. Everything else lives in the panel's
+   shadow root, where site CSS cannot reach it. */
+.nlr-reading-paragraph { outline:2px solid #aa8ee9!important; outline-offset:5px!important; border-radius:4px!important; }
+html.nlr-picking, html.nlr-picking * { cursor:crosshair!important; }

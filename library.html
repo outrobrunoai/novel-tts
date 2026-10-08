@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <script src="page-theme.js" defer></script>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+<title data-i18n="library.title">Biblioteca · Novel TTS</title>
+    <link rel="stylesheet" href="library.css">
+    <link rel="stylesheet" href="themes.css">
+    <link rel="stylesheet" href="pages.css">
+  </head>
+  <body>
+    <header>
+      <div>
+        <span class="eyebrow">NOVEL TTS</span>
+        <h1 data-i18n="library.heading">Sua biblioteca</h1>
+        <p data-i18n="library.subtitle">Continue novels, consulte capítulos e gerencie o histórico local.</p>
+      </div>
+      <div class="header-actions">
+        <button id="open-file" data-i18n="library.openFile">Abrir EPUB/PDF</button>
+        <button id="clear-history" class="ghost" data-i18n="library.clearHistory">Limpar histórico</button>
+      </div>
+    </header>
+    <main>
+      <section class="toolbar">
+        <input id="search" type="search" placeholder="Pesquisar novel ou capítulo…" data-i18n-placeholder="library.search">
+        <span id="summary"></span>
+      </section>
+      <section id="documents-section" hidden>
+        <h2 data-i18n="library.savedFiles">Arquivos locais</h2>
+        <div id="documents-list" class="grid"></div>
+      </section>
+      <section id="continue-section">
+        <h2 data-i18n="library.continue">Continuar lendo</h2>
+        <div id="progress-list" class="grid"></div>
+      </section>
+      <section>
+        <h2 data-i18n="library.recent">Capítulos recentes</h2>
+        <div id="history-list" class="list"></div>
+      </section>
+      <div id="empty" hidden>
+        <strong data-i18n="library.empty">Sua biblioteca ainda está vazia.</strong>
+        <span data-i18n="library.emptyHelp">Comece a ler uma página e ela aparecerá aqui.</span>
+      </div>
+    </main>
+    <script src="settings-schema.js"></script>
+    <script src="i18n.js"></script>
+    <script src="document-store.js"></script>
+    <script src="library.js"></script>
+  </body>
+</html>
