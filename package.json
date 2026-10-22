@@ -8,7 +8,7 @@
     "package:release": "python3 scripts/package_release.py --output dist"
   },
   "devDependencies": {
-    "eslint": "10.12.0",
+    "eslint": "10.13.0",
     "web-ext": "10.7.0"
   },
   "overrides": {
